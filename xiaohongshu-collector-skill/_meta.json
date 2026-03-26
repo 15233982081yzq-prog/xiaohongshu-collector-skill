@@ -1,0 +1,44 @@
+{
+  "name": "xiaohongshu-collector",
+  "version": "1.0.0",
+  "description": "小红书笔记收集器 - 智能搜索、筛选、保存高质量小红书笔记",
+  "author": "OpenClaw Community",
+  "license": "MIT",
+  "type": "skill",
+  "categories": ["data-collection", "web-scraping", "content-management"],
+  "tags": ["xiaohongshu", "collector", "notes", "interview", "learning"],
+  "dependencies": {
+    "python": ">=3.8",
+    "packages": ["pyyaml", "python-docx", "flask"]
+  },
+  "entry_points": {
+    "cli": "cli.py",
+    "web": "webui_simple.py",
+    "api": "collector.py"
+  },
+  "config_schema": {
+    "basic": {
+      "search_keyword": {"type": "string", "default": "后端面试"},
+      "collect_count": {"type": "integer", "default": 3},
+      "output_dir": {"type": "string", "default": "~/Desktop/面经"},
+      "output_filename": {"type": "string", "default": "xiaohongshu_notes_{date}.docx"}
+    },
+    "filter": {
+      "include_keywords": {"type": "array", "default": ["面试", "面经", "问题", "题目"]},
+      "exclude_keywords": {"type": "array", "default": ["招聘", "广告", "推广"]},
+      "min_content_length": {"type": "integer", "default": 100}
+    },
+    "advanced": {
+      "request_delay_min": {"type": "number", "default": 3.0},
+      "request_delay_max": {"type": "number", "default": 6.0},
+      "max_retries": {"type": "integer", "default": 3}
+    }
+  },
+  "capabilities": [
+    "search-xiaohongshu-notes",
+    "filter-content-by-keywords", 
+    "save-to-word-document",
+    "schedule-collection-tasks",
+    "web-interface-management"
+  ]
+}

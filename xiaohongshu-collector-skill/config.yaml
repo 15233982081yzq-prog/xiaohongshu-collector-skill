@@ -1,0 +1,52 @@
+# 小红书笔记收集器 - 默认配置文件
+# 用户可以直接修改此文件或创建自己的配置文件
+
+basic:
+  search_keyword: "后端开发面经"
+  collect_count: 3
+  output_dir: "C:/Users/Administrator/Desktop/面经收集"
+  output_filename: "小红书笔记_{keyword}_{date}.docx"
+  sort_by: "综合"
+  note_type: "不限"
+  publish_time: "不限"
+
+filter:
+  include_keywords:
+    - "面试"
+    - "面经"
+    - "问题"
+    - "后端"
+    - "Java"
+    - "Python"
+    - "算法"
+    - "数据库"
+  exclude_keywords:
+    - "招聘"
+    - "广告"
+    - "推广"
+    - "娱乐"
+    - "生活"
+    - "搞笑"
+    - "情感"
+  min_content_length: 300
+  quality_threshold: 10
+  strict_mode: true
+
+schedule:
+  enabled: true
+  cron_expression: "0 23 * * *"
+  timezone: "Asia/Shanghai"
+
+advanced:
+  request_delay_min: 2.0
+  request_delay_max: 5.0
+  timeout: 30
+  max_retries: 3
+  save_raw_json: true
+  generate_word_doc: true
+  generate_markdown: false
+
+logging:
+  level: "INFO"
+  log_file: "~/xiaohongshu_collector.log"
+  console_output: true

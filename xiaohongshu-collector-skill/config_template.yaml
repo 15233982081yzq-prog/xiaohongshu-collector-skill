@@ -1,0 +1,110 @@
+# 小红书笔记收集器 - 配置文件模板
+# 将此文件复制为 config.yaml 并修改参数
+
+# ==================== 基本配置 ====================
+basic:
+  # 搜索关键词
+  search_keyword: "后端面试"
+  
+  # 收集数量 (1-10)
+  collect_count: 3
+  
+  # 输出目录 (支持绝对路径或相对路径)
+  output_dir: "~/Desktop/面经收集"
+  
+  # 输出文件名模板 (支持变量: {date}, {keyword}, {count})
+  output_filename: "小红书笔记_{keyword}_{date}.docx"
+  
+  # 排序方式: 综合|最新|最多点赞|最多评论|最多收藏
+  sort_by: "最新"
+  
+  # 笔记类型: 不限|视频|图文
+  note_type: "不限"
+  
+  # 发布时间: 不限|一天内|一周内|半年内
+  publish_time: "不限"
+
+# ==================== 筛选配置 ====================
+filter:
+  # 必须包含的关键词 (笔记内容包含任意一个即可)
+  include_keywords:
+    - "面试"
+    - "面经"
+    - "问题"
+    - "后端"
+    - "Java"
+    - "Python"
+    - "算法"
+    - "数据库"
+  
+  # 排除的关键词 (笔记内容包含任意一个即排除)
+  exclude_keywords:
+    - "招聘"
+    - "广告"
+    - "推广"
+    - "娱乐"
+    - "生活"
+    - "搞笑"
+    - "情感"
+  
+  # 最小内容长度 (字符数，低于此长度的笔记将被排除)
+  min_content_length: 100
+  
+  # 质量阈值 (点赞+收藏+评论的总和，低于此值的笔记将被排除)
+  quality_threshold: 10
+
+# ==================== 定时任务配置 ====================
+schedule:
+  # 是否启用定时任务
+  enabled: true
+  
+  # 定时执行时间 (cron表达式)
+  # 示例:
+  #   "0 23 * * *"      # 每天23:00执行
+  #   "0 9,18 * * *"    # 每天9:00和18:00执行
+  #   "0 9 * * 1"       # 每周一9:00执行
+  cron_expression: "0 23 * * *"
+  
+  # 时区 (默认: Asia/Shanghai)
+  timezone: "Asia/Shanghai"
+
+# ==================== 高级配置 ====================
+advanced:
+  # 请求延迟 (秒，避免请求过快被风控)
+  request_delay: 2
+  
+  # 超时时间 (秒)
+  timeout: 30
+  
+  # 最大重试次数
+  max_retries: 3
+  
+  # 是否保存原始JSON数据
+  save_raw_json: true
+  
+  # 是否生成Word文档
+  generate_word_doc: true
+  
+  # 是否生成Markdown文档
+  generate_markdown: false
+
+# ==================== 日志配置 ====================
+logging:
+  # 日志级别: DEBUG|INFO|WARNING|ERROR
+  level: "INFO"
+  
+  # 日志文件路径
+  log_file: "~/xiaohongshu_collector.log"
+  
+  # 是否输出到控制台
+  console_output: true
+
+# ==================== 使用说明 ====================
+# 1. 将此文件复制为 config.yaml
+# 2. 修改需要的参数
+# 3. 运行命令:
+#    python -m xiaohongshu_collector run
+# 4. 手动运行一次:
+#    python -m xiaohongshu_collector run --once
+# 5. 测试配置:
+#    python -m xiaohongshu_collector test

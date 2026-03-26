@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小红书笔记收集器</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-book"></i> 小红书笔记收集器</h1>
+            <p class="subtitle">智能搜索、筛选、保存小红书高质量笔记</p>
+        </header>
+        
+        <div class="main-content">
+            <!-- 状态面板 -->
+            <div class="status-panel">
+                <h2><i class="fas fa-info-circle"></i> 系统状态</h2>
+                <div class="status-grid">
+                    <div class="status-item">
+                        <span class="status-label">配置状态:</span>
+                        <span id="config-status" class="status-value">加载中...</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">技能目录:</span>
+                        <span id="skills-status" class="status-value">检查中...</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">任务状态:</span>
+                        <span id="task-status" class="status-value">空闲</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">最后运行:</span>
+                        <span id="last-run" class="status-value">从未运行</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 快速操作 -->
+            <div class="quick-actions">
+                <h2><i class="fas fa-bolt"></i> 快速操作</h2>
+                <div class="action-buttons">
+                    <button id="run-now" class="btn btn-primary">
+                        <i class="fas fa-play"></i> 立即运行
+                    </button>
+                    <button id="save-config" class="btn btn-secondary">
+                        <i class="fas fa-save"></i> 保存配置
+                    </button>
+                    <button id="load-default" class="btn btn-secondary">
+                        <i class="fas fa-undo"></i> 恢复默认
+                    </button>
+                    <button id="export-config" class="btn btn-secondary">
+                        <i class="fas fa-download"></i> 导出配置
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 配置表单 -->
+            <div class="config-form">
+                <h2><i class="fas fa-cog"></i> 配置设置</h2>
+                
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="basic">基本设置</button>
+                    <button class="tab-btn" data-tab="filter">筛选设置</button>
+                    <button class="tab-btn" data-tab="schedule">定时设置</button>
+                    <button class="tab-btn" data-tab="advanced">高级设置</button>
+                </div>
+                
+                <div class="tab-content">
+                    <!-- 基本设置 -->
+                    <div id="basic-tab" class="tab-pane active">
+                        <div class="form-group">
+                            <label for="search_keyword">搜索关键词:</label>
+                            <input type="text" id="search_keyword" class="form-control" 
+                                   placeholder="例如: 后端面试">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="collect_count">收集数量:</label>
+                            <input type="number" id="collect_count" class="form-control" 
+                                   min="1" max="20" value="3">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="output_dir">保存目录:</label>
+                            <input type="text" id="output_dir" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="output_filename">输出文件名:</label>
+                            <input type="text" id="output_filename" class="form-control">
+                        </div>
+                    </div>
+                    
+                    <!-- 筛选设置 -->
+                    <div id="filter-tab" class="tab-pane">
+                        <div class="form-group">
+                            <label for="include_keywords">包含关键词 (每行一个):</label>
+                            <textarea id="include_keywords" class="form-control" rows="6"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="exclude_keywords">排除关键词 (每行一个):</label>
+                            <textarea id="exclude_keywords" class="form-control" rows="6"></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label for="min_content_length">最小内容长度:</label>
+                                <input type="number" id="min_content_length" class="form-control" 
+                                       min="10" value="100">
+                            </div>
+                            
+                            <div class="form-group half">
+                                <label for="quality_threshold">质量阈值:</label>
+                                <input type="number" id="quality_threshold" class="form-control" 
+                                       min="1" max="10" value="3">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="strict_mode">
+                                <span>严格模式 (必须匹配多个关键词)</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- 定时设置 -->
+                    <div id="schedule-tab" class="tab-pane">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="enable_schedule">
+                                <span>启用定时任务</span>
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="cron_expression">Cron表达式:</label>
+                            <input type="text" id="cron_expression" class="form-control" 
+                                   placeholder="例如: 0 23 * * * (每天23点)">
+                            <small class="form-text">格式: 分 时 日 月 周</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="timezone">时区:</label>
+                            <select id="timezone" class="form-control">
+                                <option value="Asia/Shanghai">Asia/Shanghai (中国时间)</option>
+                                <option value="UTC">UTC</option>
+                                <option value="America/New_York">America/New_York</option>
+                                <option value="Europe/London">Europe/London</option>
+                            </select>
+                        </div>
+                        
+                        <div class="schedule-examples">
+                            <h4>常用示例:</h4>
+                            <ul>
+                                <li><code>0 9 * * *</code> - 每天9点</li>
+                                <li><code>0 23 * * *</code> - 每天23点</li>
+                                <li><code>0 12,18 * * *</code> - 每天12点和18点</li>
+                                <li><code>0 9 * * 1</code> - 每周一9点</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- 高级设置 -->
+                    <div id="advanced-tab" class="tab-pane">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="enable_screenshot">
+                                <span>启用截图功能</span>
+                            </label>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label for="request_delay_min">最小请求延迟(秒):</label>
+                                <input type="number" id="request_delay_min" class="form-control" 
+                                       min="1" max="30" step="0.5" value="3">
+                            </div>
+                            
+                            <div class="form-group half">
+                                <label for="request_delay_max">最大请求延迟(秒):</label>
+                                <input type="number" id="request_delay_max" class="form-control" 
+                                       min="1" max="30" step="0.5" value="8">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="max_retries">最大重试次数:</label>
+                            <input type="number" id="max_retries" class="form-control" 
+                                   min="1" max="10" value="3">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="auto_login" checked>
+                                <span>自动检查登录状态</span>
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="log_level">日志级别:</label>
+                            <select id="log_level" class="form-control">
+                                <option value="DEBUG">DEBUG</option>
+                                <option value="INFO" selected>INFO</option>
+                                <option value="WARNING">WARNING</option>
+                                <option value="ERROR">ERROR</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 任务进度 -->
+            <div class="task-progress" id="task-progress" style="display: none;">
+                <h2><i class="fas fa-tasks"></i> 任务进度</h2>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <div class="progress-text" id="progress-text">0%</div>
+                </div>
+                <div class="progress-message" id="progress-message">准备开始...</div>
+                <div class="progress-details" id="progress-details"></div>
+            </div>
+            
+            <!-- 历史记录 -->
+            <div class="history-section">
+                <h2><i class="fas fa-history"></i> 历史记录</h2>
+                <div class="history-list" id="history-list">
+                    <p>加载历史记录中...</p>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>小红书笔记收集器 v1.0.0 | 最后更新: 2026-03-26</p>
+        </footer>
+    </div>
+    
+    <!-- 模态框 -->
+    <div id="message-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">消息</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="modal-message"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="modal-ok">确定</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/static/script.js"></script>
+</body>
+</html>
